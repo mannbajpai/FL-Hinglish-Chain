@@ -9,7 +9,10 @@ __pycache__/
 *.pyd
 *.env
 *.env.*
-
+*.pt
+*.pt.*
+tmp*
+*.key
 # VSCode
 .vscode/
 

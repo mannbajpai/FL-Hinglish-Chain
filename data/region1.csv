@@ -1,0 +1,23 @@
+﻿id,text,aspect_label
+1,Mera bijli bill bahut zyada aaya hai is mahine.,Billing & Tariff
+2,"The electricity bill amount is unexpected, charge zyada lag raha hai.",Billing & Tariff
+3,"Bill mein extra fee add hui hai, koi explanation nahi.",Billing & Tariff
+4,"Payment karne mein issues ho rahe hain, online portal error.",Billing & Tariff
+5,"Tariff structure clear nahi hai, nahi samajh aa raha rate kya hai.",Billing & Tariff
+6,Bijli bill late fee lag gayi even though time pe pay kiya tha.,Billing & Tariff
+7,"I got overcharged this month, bill higher than consumption justify karo.",Billing & Tariff
+8,Monthly bill amount always fluctuate karta hai bina warning ke.,Billing & Tariff
+9,"Bill calculation contradictory hai, units consumption match nahi karti.",Billing & Tariff
+10,"Bijli baar baar kat rahi hai, outage ka koi info nahi milta.",Service Interruptions & Reliability
+11,Power cut hone ka schedule reliable nahi hai.,Service Interruptions & Reliability
+12,Voltage fluctuation bahut zyada ho raha hai ghar pe.,Service Interruptions & Reliability
+13,Even a small storm me bhi poora area blackout ho jaata hai.,Service Interruptions & Reliability
+14,"Frequent outages se kaam ruk jaata hai, please improve.",Service Interruptions & Reliability
+15,"Kahaan se outage updates milenge, koi app nahi bata rahi.",Service Interruptions & Reliability
+16,"Supply reliability bahut poor hai, trust nahi hota.",Service Interruptions & Reliability
+17,Bijli at 220V hona chahiye par yahan 180-200V se upar nahi jaati.,Service Interruptions & Reliability
+18,Sudden interruption se appliances kharab ho rahe hain.,Service Interruptions & Reliability
+19,Meter reading ke liye technician kab aayega?,Repair & Maintenance
+20,Repair crew response time bahut slow hai.,Repair & Maintenance
+21,Service request register to ho gaya but koi call nahi aayi.,Repair & Maintenance
+22,"Meter thik nahi hua, technician wapas nahi aaya.",Repair & Maintenance
