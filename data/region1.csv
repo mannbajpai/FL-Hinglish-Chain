@@ -1,23 +1,127 @@
-﻿id,text,aspect_label
-1,Mera bijli bill bahut zyada aaya hai is mahine.,Billing & Tariff
-2,"The electricity bill amount is unexpected, charge zyada lag raha hai.",Billing & Tariff
-3,"Bill mein extra fee add hui hai, koi explanation nahi.",Billing & Tariff
-4,"Payment karne mein issues ho rahe hain, online portal error.",Billing & Tariff
-5,"Tariff structure clear nahi hai, nahi samajh aa raha rate kya hai.",Billing & Tariff
-6,Bijli bill late fee lag gayi even though time pe pay kiya tha.,Billing & Tariff
-7,"I got overcharged this month, bill higher than consumption justify karo.",Billing & Tariff
-8,Monthly bill amount always fluctuate karta hai bina warning ke.,Billing & Tariff
-9,"Bill calculation contradictory hai, units consumption match nahi karti.",Billing & Tariff
-10,"Bijli baar baar kat rahi hai, outage ka koi info nahi milta.",Service Interruptions & Reliability
-11,Power cut hone ka schedule reliable nahi hai.,Service Interruptions & Reliability
-12,Voltage fluctuation bahut zyada ho raha hai ghar pe.,Service Interruptions & Reliability
-13,Even a small storm me bhi poora area blackout ho jaata hai.,Service Interruptions & Reliability
-14,"Frequent outages se kaam ruk jaata hai, please improve.",Service Interruptions & Reliability
-15,"Kahaan se outage updates milenge, koi app nahi bata rahi.",Service Interruptions & Reliability
-16,"Supply reliability bahut poor hai, trust nahi hota.",Service Interruptions & Reliability
-17,Bijli at 220V hona chahiye par yahan 180-200V se upar nahi jaati.,Service Interruptions & Reliability
-18,Sudden interruption se appliances kharab ho rahe hain.,Service Interruptions & Reliability
-19,Meter reading ke liye technician kab aayega?,Repair & Maintenance
-20,Repair crew response time bahut slow hai.,Repair & Maintenance
-21,Service request register to ho gaya but koi call nahi aayi.,Repair & Maintenance
-22,"Meter thik nahi hua, technician wapas nahi aaya.",Repair & Maintenance
+text,aspect
+"Mera meter bahut tez chal raha hai, faulty hai shayad.",Repair & Maintenance
+Why is our feeder always the first to have an outage?,Service Interruptions & Reliability
+Can I sell surplus solar power back to the grid?,Green Energy & Sustainability
+My issue is not resolved even after multiple calls.,Customer Support & Communication
+Website par information aadhi-adhuri hai.,Customer Support & Communication
+This area has the worst power reliability.,Service Interruptions & Reliability
+"My complaint was marked as resolved, but the issue persists.",Customer Support & Communication
+Solar panel ki cleaning and maintenance kaun karega?,Green Energy & Sustainability
+I found a calculation mistake in my electricity bill.,Billing & Tariff
+Net-metering ka bill kaise calculate hota hai?,Green Energy & Sustainability
+I am interested in renewable energy sources.,Green Energy & Sustainability
+The power is tripping every few minutes.,Service Interruptions & Reliability
+Can the bill be sent to my email instead of post?,Billing & Tariff
+Heavy rain and the power is gone.,Service Interruptions & Reliability
+Are there any financing options for solar panels?,Green Energy & Sustainability
+The agent was reading from a script and didn't listen to my problem.,Customer Support & Communication
+The resolution provided was just temporary.,Customer Support & Communication
+I need to report a broken electricity pole.,Repair & Maintenance
+I appreciate your efforts towards sustainability.,Green Energy & Sustainability
+Even a slight drizzle causes a power failure.,Service Interruptions & Reliability
+New connection ke liye online apply kaise karein?,Billing & Tariff
+The complaint resolution process is not at all customer-friendly.,Customer Support & Communication
+"Fuse ud gaya hai, complaint likhwaani hai.",Repair & Maintenance
+Green tariff ke fayde kya hain compared to normal tariff?,Green Energy & Sustainability
+"I lodged a complaint yesterday, but no one has visited yet.",Repair & Maintenance
+The POS machine at your counter was not working.,Billing & Tariff
+What are the long-term benefits of solar energy?,Green Energy & Sustainability
+Last month ka payment update nahi hua hai.,Billing & Tariff
+The new meter is also running very fast.,Repair & Maintenance
+My meter display is not working.,Repair & Maintenance
+"No power supply since morning, please look into it.",Service Interruptions & Reliability
+Poori colony ki light chali gayi hai.,Service Interruptions & Reliability
+Billing me extra charges jod diye hain.,Billing & Tariff
+Why was there an unannounced power shutdown?,Service Interruptions & Reliability
+Meter box needs to be sealed properly.,Repair & Maintenance
+What kind of incentives are offered for adopting green energy?,Green Energy & Sustainability
+Why is there no escalation matrix available on the website?,Customer Support & Communication
+Email ka koi reply nahi aaya abhi tak.,Customer Support & Communication
+Your communication channels are not effective at all.,Customer Support & Communication
+The meter reader took a faulty reading.,Repair & Maintenance
+"Pichle 3 ghante se bijli nahi hai, kab aayegi?",Service Interruptions & Reliability
+"The connection wire is hanging very low, it's unsafe.",Repair & Maintenance
+Repair ke naam par extra paise maang rahe hain.,Repair & Maintenance
+"Extra security deposit maang rahe hain, kyu?",Billing & Tariff
+I need to file a formal complaint against one of your employees.,Customer Support & Communication
+Din me kayi baar bijli jaati hai.,Service Interruptions & Reliability
+How much area is required for a 5kW solar setup?,Green Energy & Sustainability
+The executive on the call was very rude.,Customer Support & Communication
+What's the future of green energy in our city?,Green Energy & Sustainability
+I need a written confirmation of my complaint resolution.,Customer Support & Communication
+Technician came but the problem is still not resolved.,Repair & Maintenance
+Why am I being charged for a meter I don't use?,Billing & Tariff
+Severe voltage fluctuations are happening right now.,Service Interruptions & Reliability
+Last night's storm caused a power outage in our area.,Service Interruptions & Reliability
+Meter rent har mahine kyu lagta hai?,Billing & Tariff
+Aapki company ka sustainability report kahan milega?,Green Energy & Sustainability
+Your call center wait time is very high.,Customer Support & Communication
+Payment failed online but amount got debited.,Billing & Tariff
+Do you provide support for solar panel maintenance?,Green Energy & Sustainability
+This is the third power cut this week.,Service Interruptions & Reliability
+The service team left without fixing the main problem.,Repair & Maintenance
+I need to speak with the nodal officer.,Customer Support & Communication
+Your green campaign is very impressive.,Green Energy & Sustainability
+Billing cycle ke hisaab se reading nahi li gayi.,Billing & Tariff
+How can I apply for a net-meter for my solar plant?,Green Energy & Sustainability
+I want to report an open pillar box in my street.,Repair & Maintenance
+The local office staff is not cooperative.,Customer Support & Communication
+Your technician was not carrying proper tools.,Repair & Maintenance
+The response time for email queries is terrible.,Customer Support & Communication
+Commercial aur residential tariff me kitna difference hai?,Billing & Tariff
+Tell me more about the 'green tariff' you offer.,Green Energy & Sustainability
+I appreciate the quick response from your repair team.,Repair & Maintenance
+The service line to my home is dangerously low.,Repair & Maintenance
+"My bill is generated on an estimated reading, not actual.",Billing & Tariff
+How will my electricity bill be calculated with net-metering?,Green Energy & Sustainability
+"Bill me reading galat hai, pichle mahine se bhi kam hai.",Billing & Tariff
+Mujhe digital payment par cashback milega kya?,Billing & Tariff
+"We are facing partial power supply, some appliances are not working.",Service Interruptions & Reliability
+High voltage ke kaaran mera TV kharab ho gaya.,Service Interruptions & Reliability
+Can I pay my bill in installments?,Billing & Tariff
+"I am a senior citizen, is there any concession for me?",Billing & Tariff
+The technician was not able to identify the fault.,Repair & Maintenance
+Is net-metering available for commercial establishments?,Green Energy & Sustainability
+Three phase me se ek hi phase me light aa rahi hai.,Service Interruptions & Reliability
+Customer care executive couldn't understand my problem.,Customer Support & Communication
+Tell me about solar net-metering policies.,Green Energy & Sustainability
+Voltage drop ke kaaran meri motor jal gayi.,Service Interruptions & Reliability
+There is no accountability for the service provided.,Customer Support & Communication
+Restoration time for power cuts is too long.,Service Interruptions & Reliability
+Are your green plans available for all consumers?,Green Energy & Sustainability
+Meter reading lene wala banda ghar ke andar nahi aaya.,Repair & Maintenance
+Mera bill cycle change ho sakta hai kya?,Billing & Tariff
+"Meter replacement ki request daali thi, kab tak hoga?",Repair & Maintenance
+Name correction charges kitne hain?,Billing & Tariff
+Lineman is asking for a bribe to fix the issue.,Repair & Maintenance
+I'm satisfied with the promptness of the repair work.,Repair & Maintenance
+I never received a confirmation for my service request.,Customer Support & Communication
+I did not receive any SMS alert for today's power cut.,Customer Support & Communication
+Do green tariffs cost more than regular ones?,Green Energy & Sustainability
+Your company's focus on green energy is commendable.,Green Energy & Sustainability
+Is there any maintenance work going on?,Service Interruptions & Reliability
+The support staff seems untrained and clueless.,Customer Support & Communication
+Does solar work effectively during monsoon season?,Green Energy & Sustainability
+Payment receipt online download nahi ho rahi hai.,Billing & Tariff
+Tariff plan change karne ka kya procedure hai?,Billing & Tariff
+"Arrears bill me add hokar aa gaye hain, but maine to pay kar diya tha.",Billing & Tariff
+My digital meter is not showing any reading.,Repair & Maintenance
+"The entire street is dark, seems like a major fault.",Service Interruptions & Reliability
+Reconnection charges kitne hain?,Billing & Tariff
+"Taar toot kar giri hui hai, please jaldi theek karwayein.",Repair & Maintenance
+Supply to my shop has been down for 5 hours.,Service Interruptions & Reliability
+The billing process needs to be more transparent.,Billing & Tariff
+It took me 30 minutes to finally connect to an agent.,Customer Support & Communication
+The complaint portal on your app is not working.,Customer Support & Communication
+EV charging ke liye alag se connection lena padega?,Green Energy & Sustainability
+I think the meter reading on the bill is incorrect.,Billing & Tariff
+I have not received any update on my grievance.,Customer Support & Communication
+There is an error in my name on the bill.,Billing & Tariff
+Mera naya connection ka application status kya hai?,Billing & Tariff
+"Kal se light aayi nahi hai, aur phone bhi nahi utha raha koi.",Service Interruptions & Reliability
+Mujhe green energy tariff plan me switch karna hai.,Green Energy & Sustainability
+Aapke area ke JE ka number mil sakta hai?,Service Interruptions & Reliability
+Power cut ka koi schedule hai toh batao.,Service Interruptions & Reliability
+Power cut ki wajah se bachon ki padhai disturb hoti hai.,Service Interruptions & Reliability
+Our street lights are not working for many days.,Repair & Maintenance
+New tariff plan me kaise switch karun?,Billing & Tariff

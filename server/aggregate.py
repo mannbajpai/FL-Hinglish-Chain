@@ -3,7 +3,7 @@ import os
 import torch
 from transformers import AutoModel
 
-MODEL_NAME = "ai4bharat/indicBERTv2-mlm-only"
+MODEL_NAME = "bert-base-multilingual-cased"
 WEIGHTS_DIR = "server/decrypted_weights"
 OUTPUT_PATH = "server/global_model.pt"
 
@@ -11,13 +11,19 @@ class AspectClassifier(torch.nn.Module):
     def __init__(self, model_name, num_labels=3):
         super().__init__()
         self.encoder = AutoModel.from_pretrained(model_name)
+        # Match the training model architecture - freeze encoder for consistency
+        self.encoder.eval()
+        for param in self.encoder.parameters():
+            param.requires_grad = False
+            
         self.dropout = torch.nn.Dropout(0.3)
         self.classifier = torch.nn.Linear(self.encoder.config.hidden_size, num_labels)
 
     def forward(self, input_ids, attention_mask):
-        outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
-        cls_output = outputs.last_hidden_state[:, 0, :]
-        return self.classifier(self.dropout(cls_output))
+        with torch.no_grad():
+            out = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
+            cls = out.last_hidden_state[:, 0]
+        return self.classifier(self.dropout(cls))
 
 # 🔁 Strip out classifier weights and average only encoder
 
@@ -29,8 +35,18 @@ def federated_average(weight_files):
     for i, path in enumerate(weight_files):
         print(f"🔄 Loading {path}")
         state_dict = torch.load(path, map_location=torch.device("cpu"))
+        
+        # Remove '_module.' prefix from keys (added by Opacus)
+        cleaned_state_dict = {}
+        for k, v in state_dict.items():
+            if k.startswith("_module."):
+                cleaned_key = k[8:]  # Remove '_module.' prefix
+                cleaned_state_dict[cleaned_key] = v
+            else:
+                cleaned_state_dict[k] = v
 
-        encoder_weights = {k: v for k, v in state_dict.items() if not k.startswith("classifier")}
+        # Only keep encoder weights (not classifier)
+        encoder_weights = {k: v for k, v in cleaned_state_dict.items() if not k.startswith("classifier")}
 
         if encoder_keys is None:
             encoder_keys = encoder_weights.keys()
@@ -55,7 +71,7 @@ def aggregate_models():
     print(f"📦 Aggregating {len(weight_files)} models (encoder only)...")
     averaged_encoder = federated_average(weight_files)
 
-    model = AspectClassifier(MODEL_NAME, num_labels=3)
+    model = AspectClassifier(MODEL_NAME, num_labels=5)  # Fixed: 5 labels, not 3
     model_dict = model.state_dict()
     model_dict.update(averaged_encoder)
     model.load_state_dict(model_dict)

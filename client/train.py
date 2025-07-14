@@ -1,25 +1,32 @@
+#  MODEL_NAME = ""  # lightweight multilingual model
 # client/train.py
 
 import os
 import torch
 import pandas as pd
 from torch.utils.data import DataLoader, Dataset
-from transformers import AutoTokenizer, AutoModel, AutoConfig
+from transformers import AutoTokenizer, AutoModel
 from opacus import PrivacyEngine
+from opacus.utils.batch_memory_manager import BatchMemoryManager
 from sklearn.preprocessing import LabelEncoder
 import argparse
 
 # -----------------------------
-# Configurations
+# Config
 # -----------------------------
-MODEL_NAME = "ai4bharat/indicBERTv2-mlm"  # lightweight multilingual model
+MODEL_NAME     = "bert-base-multilingual-cased"
+MAX_LEN        = 128
+BATCH_SIZE     = 8
+EPOCHS         = 3
+LR             = 2e-5
+NOISE_MULT     = 1.0     # adjust for privacy vs. utility
+MAX_GRAD_NORM  = 1.0
+DELTA          = 1e-5    # target delta for ε calculation
+
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-MAX_LEN = 128
-BATCH_SIZE = 8
-EPOCHS = 3
 
 # -----------------------------
-# Dataset Class
+# Dataset
 # -----------------------------
 class AspectDataset(Dataset):
     def __init__(self, texts, labels, tokenizer):
@@ -31,7 +38,7 @@ class AspectDataset(Dataset):
         return len(self.texts)
 
     def __getitem__(self, idx):
-        item = self.tokenizer(
+        enc = self.tokenizer(
             self.texts[idx],
             truncation=True,
             padding="max_length",
@@ -39,86 +46,104 @@ class AspectDataset(Dataset):
             return_tensors="pt"
         )
         return {
-            "input_ids": item["input_ids"].squeeze(0),
-            "attention_mask": item["attention_mask"].squeeze(0),
+            "input_ids": enc["input_ids"].squeeze(0),
+            "attention_mask": enc["attention_mask"].squeeze(0),
             "label": torch.tensor(self.labels[idx], dtype=torch.long)
         }
 
 # -----------------------------
-# Model Class
+# Model - Opacus Compatible
 # -----------------------------
 class AspectClassifier(torch.nn.Module):
     def __init__(self, num_labels):
-        super(AspectClassifier, self).__init__()
+        super().__init__()
         self.encoder = AutoModel.from_pretrained(MODEL_NAME)
+        # Disable dropout in encoder for Opacus compatibility
+        self.encoder.eval()
+        for param in self.encoder.parameters():
+            param.requires_grad = False
+            
+        # Only train the classifier head
         self.dropout = torch.nn.Dropout(0.3)
         self.classifier = torch.nn.Linear(self.encoder.config.hidden_size, num_labels)
 
     def forward(self, input_ids, attention_mask):
-        outputs = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
-        pooled_output = outputs.last_hidden_state[:, 0]  # CLS token
-        x = self.dropout(pooled_output)
-        return self.classifier(x)
+        with torch.no_grad():
+            out = self.encoder(input_ids=input_ids, attention_mask=attention_mask)
+            cls = out.last_hidden_state[:, 0]
+        return self.classifier(self.dropout(cls))
 
 # -----------------------------
-# Train Function with Differential Privacy
+# Training with DP
 # -----------------------------
 def train_local_model(region_csv, region_name):
-    print(f"\n🔁 Training model for {region_name}...")
-
     df = pd.read_csv(region_csv)
     texts = df["text"].tolist()
-    labels = LabelEncoder().fit_transform(df["aspect"])  # Encode to 0, 1, 2
+    labels = LabelEncoder().fit_transform(df["aspect"].tolist())
 
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     dataset = AspectDataset(texts, labels, tokenizer)
     dataloader = DataLoader(dataset, batch_size=BATCH_SIZE, shuffle=True)
 
     model = AspectClassifier(num_labels=len(set(labels))).to(DEVICE)
-    optimizer = torch.optim.Adam(model.parameters(), lr=2e-5)
+    optimizer = torch.optim.AdamW(model.parameters(), lr=LR)
     criterion = torch.nn.CrossEntropyLoss()
 
-    # Enable Differential Privacy
+    # Calculate sample rate and initialize PrivacyEngine
+    sample_rate = BATCH_SIZE / len(dataset)
     privacy_engine = PrivacyEngine()
+    
     model, optimizer, dataloader = privacy_engine.make_private(
         module=model,
         optimizer=optimizer,
         data_loader=dataloader,
-        noise_multiplier=1.0,      # tune this for privacy/accuracy trade-off
-        max_grad_norm=1.0
+        noise_multiplier=NOISE_MULT,
+        max_grad_norm=MAX_GRAD_NORM
     )
-    print(f"🔐 DP Enabled | ε (epsilon) ≈ {privacy_engine.accountant.get_epsilon(delta=1e-5):.2f}")
+    print(f"🔐 DP Engine attached (σ={NOISE_MULT}, C={MAX_GRAD_NORM}, q={sample_rate:.4f})")
 
     model.train()
     for epoch in range(EPOCHS):
         total_loss = 0
-        for batch in dataloader:
-            input_ids = batch["input_ids"].to(DEVICE)
-            attention_mask = batch["attention_mask"].to(DEVICE)
-            labels = batch["label"].to(DEVICE)
+        
+        with BatchMemoryManager(
+            data_loader=dataloader, 
+            max_physical_batch_size=BATCH_SIZE,
+            optimizer=optimizer
+        ) as memory_safe_data_loader:
+            
+            for batch in memory_safe_data_loader:
+                input_ids = batch["input_ids"].to(DEVICE)
+                attention_mask = batch["attention_mask"].to(DEVICE)
+                labels = batch["label"].to(DEVICE)
 
-            optimizer.zero_grad()
-            outputs = model(input_ids, attention_mask)
-            loss = criterion(outputs, labels)
-            loss.backward()
-            optimizer.step()
+                optimizer.zero_grad()
+                logits = model(input_ids, attention_mask)
+                loss = criterion(logits, labels)
+                loss.backward()
+                optimizer.step()
 
-            total_loss += loss.item()
+                total_loss += loss.item()
 
-        avg_loss = total_loss / len(dataloader)
-        print(f"📉 Epoch {epoch+1}/{EPOCHS} | Loss: {avg_loss:.4f}")
+        print(f"[{region_name}] Epoch {epoch+1}/{EPOCHS} — Loss: {total_loss/len(dataloader):.4f}")
 
+    # Compute epsilon
+    epsilon = privacy_engine.get_epsilon(delta=DELTA)
+    print(f"🔐 Trained with DP: ε = {epsilon:.2f}, δ = {DELTA}")
+
+    # Save
     os.makedirs("client/weights", exist_ok=True)
-    torch.save(model.state_dict(), f"client/weights/{region_name}.pt")
-    print(f"✅ Saved DP-trained model: client/weights/{region_name}.pt")
+    path = f"client/weights/{region_name}.pt"
+    torch.save(model.state_dict(), path)
+    print(f"✅ Saved DP-trained model at: {path}")
 
 # -----------------------------
-# CLI Entry Point
+# CLI
 # -----------------------------
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--region", required=True, help="Region name (e.g., Region1)")
-    parser.add_argument("--csv", required=True, help="Path to regional CSV data")
+    parser.add_argument("--region", required=True, help="Region name (Region1, etc.)")
+    parser.add_argument("--csv",    required=True, help="Path to regional CSV file")
     args = parser.parse_args()
 
-    train_local_model(region_csv=args.csv, region_name=args.region)
+    train_local_model(args.csv, args.region)
